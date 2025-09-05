@@ -8,13 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
-
-/**
- * 3D Animated Ecommerce Website — Single-file React starter
- * - Tech: React + Tailwind + Framer Motion + @react-three/fiber + drei + shadcn/ui
- * - Features: 3D hero, product grid, live cart, search/filter, micro-interactions
- * - Replace placeholder 3D shapes with your own GLTF/GLB model URLs inside <ProductModel />
- */
+import { currency } from "@/lib/utils";
 
 const PRODUCTS = [
   {
@@ -51,10 +45,6 @@ const PRODUCTS = [
   },
 ];
 
-function currency(n) {
-  return new Intl.NumberFormat(undefined, { style: "currency", currency: "USD" }).format(n);
-}
-
 function useCart() {
   const [items, setItems] = useState({}); // id -> qty
   const add = (id) => setItems((m) => ({ ...m, [id]: (m[id] || 0) + 1 }));
@@ -71,8 +61,6 @@ function useCart() {
 }
 
 function ProductModel({ color = "#6366f1" }) {
-  // Replace placeholder with your GLTF model: 
-  // const gltf = useGLTF("/models/yourModel.glb")
   return (
     <Float speed={2} rotationIntensity={1} floatIntensity={1}>
       <PresentationControls global polar={[0, 0]} azimuth={[-Math.PI / 8, Math.PI / 8]}>
@@ -174,7 +162,7 @@ export default function Ecommerce3DApp() {
                   )}
 
                   {Object.entries(cart.items).map(([id, qty]) => {
-                    const p = PRODUCTS.find((x) => x.id === id)!;
+                    const p = PRODUCTS.find((x) => x.id === id);
                     return (
                       <Card key={id}>
                         <CardContent className="p-4 flex items-center gap-4">
@@ -249,7 +237,7 @@ export default function Ecommerce3DApp() {
                   <p className="text-sm text-slate-500">Your cart is empty.</p>
                 )}
                 {Object.entries(cart.items).map(([id, qty]) => {
-                  const p = PRODUCTS.find((x) => x.id === id)!;
+                  const p = PRODUCTS.find((x) => x.id === id);
                   return (
                     <Card key={id}>
                       <CardContent className="p-4 flex items-center gap-4">
@@ -344,26 +332,33 @@ export default function Ecommerce3DApp() {
           </AnimatePresence>
         </section>
 
-        {/* CTA */}
-        <section className="mt-14 md:mt-20">
+                {/* CTA */}
+                <section className="mt-14 md:mt-20">
           <div className="relative overflow-hidden rounded-2xl p-8 md:p-12 bg-gradient-to-r from-indigo-600 to-violet-600 text-white">
-            <h2 className="text-2xl md:text-3xl font-extrabold">Ready to make it yours?</h2>
-            <p className="mt-2 text-indigo-100 max-w-2xl">
-              Swap in your 3D models, connect your backend (Stripe/Shopify/Supabase), and launch a store that feels alive.
+            <h2 className="text-2xl md:text-3xl font-bold">
+              Ready to transform your store?
+            </h2>
+            <p className="mt-2 text-indigo-100 max-w-xl">
+              Launch a 3D-animated ecommerce experience that your customers
+              will love. Fully responsive, modern, and lightning-fast.
             </p>
-            <div className="mt-5 flex flex-wrap gap-3">
-              <Button variant="secondary">View Docs</Button>
-              <Button variant="outline" className="text-white border-white/50">Contact Sales</Button>
+            <div className="mt-4 flex gap-3">
+              <Button className="bg-white text-indigo-600 hover:bg-indigo-100">
+                Get Started
+              </Button>
+              <Button variant="outline" className="text-white border-white hover:bg-white/10">
+                Learn More
+              </Button>
             </div>
-            <div className="absolute -right-10 -bottom-10 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
           </div>
         </section>
-
-        {/* FOOTER */}
-        <footer className="py-10 text-center text-sm text-slate-500">
-          © {new Date().getFullYear()} NeoStore. Built with ♥ for modern commerce.
-        </footer>
       </main>
+
+      {/* FOOTER */}
+      <footer className="mt-16 border-t border-slate-200 py-6 text-center text-sm text-slate-500">
+        © {new Date().getFullYear()} NeoStore. Built with React, Three.js, and TailwindCSS.
+      </footer>
     </div>
   );
 }
+
