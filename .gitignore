@@ -1,0 +1,105 @@
+# =========================================
+# Root Gitignore for E-commerce Monorepo
+# Frontend: Node.js/React/Vue/Next.js
+# Backend: Java (Maven/Gradle)
+# =========================================
+
+# -------------------------
+# Node.js (Frontend)
+# -------------------------
+frontend/node_modules/
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+frontend/package-lock.json
+frontend/yarn.lock
+frontend/pnpm-lock.yaml
+
+# Frontend build outputs
+frontend/build/
+frontend/dist/
+frontend/.next/
+frontend/out/
+frontend/.cache/
+frontend/.parcel-cache/
+
+# -------------------------
+# Java (Backend)
+# -------------------------
+backend/target/
+backend/build/
+backend/out/
+
+# Maven specific
+backend/logs/
+backend/.mvn/wrapper/maven-wrapper.jar
+
+# Gradle specific
+backend/.gradle/
+backend/build/
+backend/gradle-app.setting
+backend/*.war
+backend/*.ear
+
+# Eclipse/IDEA/VSCode junk
+backend/.classpath
+backend/.project
+backend/.settings/
+backend/.idea/
+backend/.vscode/
+
+# Other Java stuff
+*.iml
+*.class
+*.jar
+*.war
+*.ear
+
+# -------------------------
+# Common Environment & Secrets
+# -------------------------
+.env
+.env.local
+.env.*.local
+*.env
+
+# -------------------------
+# Logs
+# -------------------------
+logs/
+*.log
+*.log.*
+*.out
+*.pid
+*.seed
+*.gz
+
+# -------------------------
+# Testing & coverage
+# -------------------------
+coverage/
+.nyc_output/
+jest-cache/
+jest-report/
+
+# -------------------------
+# OS files
+# -------------------------
+.DS_Store
+Thumbs.db
+
+# -------------------------
+# E-commerce Specific
+# -------------------------
+uploads/
+public/uploads/
+storage/
+assets/uploads/
+
+# Database files
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+dump.sql
