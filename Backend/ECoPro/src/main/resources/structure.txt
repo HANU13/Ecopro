@@ -1,0 +1,84 @@
+ecommerce-backend/
+│── pom.xml                       # Maven dependencies
+│── README.md                     # Project documentation
+│── .gitignore
+│
+├── src/
+│   ├── main/
+│   │   ├── java/com/example/ecommerce/
+│   │   │   ├── config/            # Security, Swagger, CORS, DB, Redis configs
+│   │   │   │   ├── SecurityConfig.java
+│   │   │   │   ├── SwaggerConfig.java
+│   │   │   │   └── RedisConfig.java
+│   │   │   │
+│   │   │   ├── controller/        # REST Controllers (APIs)
+│   │   │   │   ├── UserController.java
+│   │   │   │   ├── ProductController.java
+│   │   │   │   ├── CartController.java
+│   │   │   │   ├── OrderController.java
+│   │   │   │   ├── PaymentController.java
+│   │   │   │   └── AdminController.java
+│   │   │   │
+│   │   │   ├── dto/               # Data Transfer Objects (API payloads)
+│   │   │   │   ├── UserDto.java
+│   │   │   │   ├── ProductDto.java
+│   │   │   │   ├── OrderDto.java
+│   │   │   │   └── PaymentDto.java
+│   │   │   │
+│   │   │   ├── entity/            # JPA Entities (map to DB tables)
+│   │   │   │   ├── User.java
+│   │   │   │   ├── Address.java
+│   │   │   │   ├── Category.java
+│   │   │   │   ├── Product.java
+│   │   │   │   ├── ProductVariant.java
+│   │   │   │   ├── Cart.java
+│   │   │   │   ├── CartItem.java
+│   │   │   │   ├── Order.java
+│   │   │   │   ├── OrderItem.java
+│   │   │   │   ├── Payment.java
+│   │   │   │   ├── Wishlist.java
+│   │   │   │   ├── ProductReview.java
+│   │   │   │   ├── Coupon.java
+│   │   │   │   ├── Notification.java
+│   │   │   │   └── AdminLog.java
+│   │   │   │
+│   │   │   ├── exception/         # Global error handling
+│   │   │   │   ├── GlobalExceptionHandler.java
+│   │   │   │   └── ResourceNotFoundException.java
+│   │   │   │
+│   │   │   ├── repository/        # JPA Repositories
+│   │   │   │   ├── UserRepository.java
+│   │   │   │   ├── ProductRepository.java
+│   │   │   │   ├── OrderRepository.java
+│   │   │   │   └── PaymentRepository.java
+│   │   │   │
+│   │   │   ├── service/           # Business logic
+│   │   │   │   ├── UserService.java
+│   │   │   │   ├── ProductService.java
+│   │   │   │   ├── CartService.java
+│   │   │   │   ├── OrderService.java
+│   │   │   │   ├── PaymentService.java
+│   │   │   │   └── NotificationService.java
+│   │   │   │
+│   │   │   ├── util/              # Utility classes (helpers)
+│   │   │   │   ├── JwtUtil.java
+│   │   │   │   ├── EmailUtil.java
+│   │   │   │   └── MapperUtil.java
+│   │   │   │
+│   │   │   └── EcommerceApplication.java  # Main Spring Boot app
+│   │   │
+│   │   └── resources/
+│   │       ├── application.yml    # Config (DB, Redis, JWT, Swagger, etc.)
+│   │       ├── schema.sql         # DB schema init (optional)
+│   │       ├── data.sql           # Test/demo data (optional)
+│   │       └── logback-spring.xml # Logging config
+│   │
+│   └── test/java/com/example/ecommerce/
+│       ├── controller/            # API tests (MockMvc)
+│       ├── service/               # Service tests
+│       └── repository/            # Repository tests
+│
+└── docker/                        # Docker & deployment
+    ├── Dockerfile
+    ├── docker-compose.yml
+    └── kubernetes-manifest.yml
