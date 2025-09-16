@@ -1,0 +1,131 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: ECoPro
+
+  # Database Configuration
+  datasource:
+    url: jdbc:postgresql://localhost:5432/mydb?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+    username: myuser
+    password: mypassword
+    driver-class-name: org.postgresql.Driver
+
+  # JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  # Mail Configuration
+  mail:
+    host: localhost #smtp.gmail.com
+    port: 25
+#    username: ${MAIL_USERNAME:your-email@gmail.com}
+#    password: ${MAIL_PASSWORD:your-app-password}
+#    from: ${MAIL_FROM:your-email@gmail.com}
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
+#
+  # OAuth2 Configuration
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: "YOUR_GOOGLE_CLIENT_ID" #${GOOGLE_CLIENT_ID:your-google-client-id}
+            client-secret: "YOUR_GOOGLE_CLIENT_SECRET" #${GOOGLE_CLIENT_SECRET:your-google-client-secret}
+            redirect-uri: "http://localhost:8080//oauth2/callback/{registrationId}"
+            scope:
+              - email
+              - profile
+#
+#  # File Upload Configuration
+#  servlet:
+#    multipart:
+#      max-file-size: 5MB
+#      max-request-size: 5MB
+
+# JWT Configuration
+jwt:
+  secret: "this-is-a-very-strong-secret-key-of-32-bytes!"
+  expiration: 86400000  # 24 hours in milliseconds
+  refresh-expiration: 2592000000  # 30 days in milliseconds
+
+# Application Configuration
+app:
+  oauth2:
+    authorized-redirect-uri: "http://localhost:8080/oauth2/callback/*"
+  frontend:
+    url:  http://localhost:8080 #${FRONTEND_URL:http://localhost:3000}
+  backend:
+    url: http://localhost:8080  #${BACKEND_URL:http://localhost:8080}
+#
+# File Upload Configuration
+file:
+  upload:
+    directory: file.upload.directory=/home/neeraj/uploads   #${UPLOAD_DIR:./uploads}
+
+# Logging Configuration
+logging:
+  level:
+    com.ecommerce: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/ecommerce.log
+
+# Management Endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when_authorized
+
+# API Documentation
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+
+
+#server:
+#  port: 8080
+#
+#spring:
+#  application:
+#    name: ECoPro
+#
+#  # Database Configuration (PostgreSQL)
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/mydb
+#    username: myuser
+#    password: mypassword
+#    driver-class-name: org.postgresql.Driver
+#
+#  # JPA Configuration
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: false
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+#        format_sql: true

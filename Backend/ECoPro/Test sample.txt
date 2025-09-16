@@ -1,0 +1,67 @@
+Postman Collection Examples
+
+#### 1. Register User
+```json
+POST /api/auth/register
+Content-Type: application/json
+
+{
+    "email": "customer@example.com",
+    "firstName": "John",
+    "lastName": "Doe",
+    "password": "SecurePass123!",
+    "phone": "+1234567890",
+    "role": "CUSTOMER"
+}
+```
+
+#### 2. Login User
+```json
+POST /api/auth/login
+Content-Type: application/json
+
+{
+    "email": "customer@example.com",
+    "password": "SecurePass123!",
+    "rememberMe": true
+}
+```
+
+#### 3. Get User Profile
+```json
+GET /api/users/me
+Authorization: Bearer {your-jwt-token}
+```
+
+#### 4. Update Profile
+```json
+PUT /api/users/me
+Authorization: Bearer {your-jwt-token}
+Content-Type: application/json
+
+{
+    "firstName": "John Updated",
+    "lastName": "Doe Updated",
+    "phone": "+1234567891"
+}
+```
+
+#### 5. Add Address
+```json
+POST /api/users/addresses
+Authorization: Bearer {your-jwt-token}
+Content-Type: application/json
+
+{
+    "fullName": "John Doe",
+    "phone": "+1234567890",
+    "addressLine1": "123 Main Street",
+    "addressLine2": "Apt 4B",
+    "city": "New York",
+    "state": "NY",
+    "zipCode": "10001",
+    "country": "USA",
+    "type": "HOME",
+    "isDefault": true
+}
+```

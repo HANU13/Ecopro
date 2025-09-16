@@ -1,6 +1,13 @@
 package com.litemax.ECoPro.entity.auth;
+
+import com.litemax.ECoPro.entity.auth.User;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -8,39 +15,64 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Many addresses to one user
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Column(nullable = false)
-    private String line1;
+    private String fullName;
 
-    private String line2;
+    @Column(nullable = false)
+    private String phone;
+
+    @Column(nullable = false)
+    private String addressLine1;
+
+    private String addressLine2;
 
     @Column(nullable = false)
     private String city;
 
+    @Column(nullable = false)
     private String state;
 
     @Column(nullable = false)
-    private String postalCode;
+    private String zipCode;
 
     @Column(nullable = false)
-    private String countryCode;
+    private String country;
 
-    @Column(nullable = false)
-    private Boolean isDefaultShipping = false;
+    @Enumerated(EnumType.STRING)
+    private AddressType type = AddressType.OTHER;
 
-    @Column(nullable = false)
-    private Boolean isDefaultBilling = false;
+    private boolean isDefault = false;
 
+    @CreationTimestamp
     private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
+    public enum AddressType {
+        HOME, WORK, OTHER
+    }
+
+    public String getFormattedAddress() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(addressLine1);
+        if (addressLine2 != null && !addressLine2.trim().isEmpty()) {
+            sb.append(", ").append(addressLine2);
+        }
+        sb.append(", ").append(city);
+        sb.append(", ").append(state);
+        sb.append(" ").append(zipCode);
+        sb.append(", ").append(country);
+        return sb.toString();
+    }
 }

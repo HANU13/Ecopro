@@ -1,15 +1,15 @@
 package com.litemax.ECoPro.entity.auth;
 
 import jakarta.persistence.*;
-import lombok.*;
-import java.util.Set;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 @Entity
 @Table(name = "permissions")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Permission {
 
     @Id
@@ -17,11 +17,20 @@ public class Permission {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String code;
+    private String name;
 
     private String description;
 
-    // Relationships
-    @OneToMany(mappedBy = "permission")
-    private Set<RolePermission> rolePermissions;
+    @Enumerated(EnumType.STRING)
+    private PermissionCategory category;
+
+    public enum PermissionCategory {
+        USER_MANAGEMENT,
+        PRODUCT_MANAGEMENT,
+        ORDER_MANAGEMENT,
+        PAYMENT_MANAGEMENT,
+        INVENTORY_MANAGEMENT,
+        REPORTING,
+        SYSTEM_ADMIN
+    }
 }
