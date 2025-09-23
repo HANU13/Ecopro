@@ -1,8 +1,8 @@
 package com.litemax.ECoPro.service;
 
-
 import com.litemax.ECoPro.dto.user.UserDTO;
 import com.litemax.ECoPro.entity.auth.User;
+import com.litemax.ECoPro.entity.cart.Cart;
 import com.litemax.ECoPro.repository.auth.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -18,6 +18,12 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+
+    public User findById(Long userId){
+        User user=userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User Id not found "+userId));
+        return user;
+    }
 
     public UserDTO getLoggedInUserProfile() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

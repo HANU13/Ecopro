@@ -1,15 +1,31 @@
 package com.litemax.ECoPro.controller.auth;
 
-import com.litemax.ECoPro.dto.auth.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+
+import com.litemax.ECoPro.dto.auth.AuthResponse;
+import com.litemax.ECoPro.dto.auth.ForgotPasswordRequest;
+import com.litemax.ECoPro.dto.auth.LoginRequest;
+import com.litemax.ECoPro.dto.auth.RefreshTokenRequest;
+import com.litemax.ECoPro.dto.auth.RegisterRequest;
+import com.litemax.ECoPro.dto.auth.ResetPasswordRequest;
 import com.litemax.ECoPro.service.auth.AuthService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -78,5 +94,13 @@ public class AuthController {
         log.info("Password reset request received");
         AuthResponse response = authService.resetPassword(request);
         return ResponseEntity.ok(response);
+    }
+    
+    @GetMapping("/user")
+    public Object user(@AuthenticationPrincipal OAuth2User principal) {
+        if (principal == null) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not authenticated");
+        }
+        return principal.getAttributes();
     }
 }

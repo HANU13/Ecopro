@@ -2,10 +2,7 @@ package com.litemax.ECoPro.config;
 
 import com.litemax.ECoPro.security.JwtAuthenticationEntryPoint;
 import com.litemax.ECoPro.security.JwtAuthenticationFilter;
-import com.litemax.ECoPro.security.oauth2.OAuth2AuthenticationFailureHandler;
-import com.litemax.ECoPro.security.oauth2.OAuth2AuthenticationSuccessHandler;
-import com.litemax.ECoPro.security.oauth2.CustomOAuth2UserService;
-import com.litemax.ECoPro.security.oauth2.CustomUserDetailsService;
+import com.litemax.ECoPro.security.oauth2.*;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +38,7 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+    private final HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -75,10 +73,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         // Public endpoints
                         .requestMatchers("/api/auth/**", "/api/public/**","api/swagger-ui/index.html").permitAll()
-                        .requestMatchers("/favicon.ico", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
+                        .requestMatchers("/favicon.ico","v1/swagger.yaml", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .requestMatchers("/actuator/health", "/actuator/info").permitAll()
-                        .requestMatchers("/oauth2/**").permitAll()
-
+                        .requestMatchers("/api/auth/oauth2/**", "debug/oauth").permitAll()
+                        
                         // Admin only endpoints
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
@@ -92,10 +90,21 @@ public class SecurityConfig {
                         .requestMatchers("/api/users/me", "/api/users/addresses/**").authenticated()
 
                         // All other requests need authentication
+
+                        .requestMatchers("/api/auth/user").authenticated() 
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
+                        .authorizationEndpoint(authorization -> authorization
+                                .baseUri("/oauth2/authorization")
+                                .authorizationRequestRepository(cookieAuthorizationRequestRepository)
+                        )
+                        .redirectionEndpoint(redirection -> redirection
+                                .baseUri("/oauth2/callback/*")
+                        )
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService)
+                        )
                         .successHandler(oAuth2AuthenticationSuccessHandler)
                         .failureHandler(oAuth2AuthenticationFailureHandler)
                 )

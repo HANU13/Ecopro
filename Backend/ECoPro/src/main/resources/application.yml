@@ -24,51 +24,84 @@ spring:
 
   # Mail Configuration
   mail:
-    host: localhost #smtp.gmail.com
-    port: 25
-#    username: ${MAIL_USERNAME:your-email@gmail.com}
-#    password: ${MAIL_PASSWORD:your-app-password}
-#    from: ${MAIL_FROM:your-email@gmail.com}
-#    properties:
-#      mail:
-#        smtp:
-#          auth: true
-#          starttls:
-#            enable: true
-#
+    host: smtp.gmail.com #smtp.gmail.com
+    port: 587
+    username: technomitic@gmail.com
+    password: "gjwi wyky czsw jrjp" #${MAIL_PASSWORD:your-app-password}
+    from:   no-technomitic@gmail.com #${MAIL_FROM:your-email@gmail.com}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+#          auth.mechanisms: XOAUTH2
+
+
+          
+
   # OAuth2 Configuration
   security:
     oauth2:
       client:
         registration:
           google:
-            client-id: "YOUR_GOOGLE_CLIENT_ID" #${GOOGLE_CLIENT_ID:your-google-client-id}
-            client-secret: "YOUR_GOOGLE_CLIENT_SECRET" #${GOOGLE_CLIENT_SECRET:your-google-client-secret}
-            redirect-uri: "http://localhost:8080//oauth2/callback/{registrationId}"
-            scope:
-              - email
-              - profile
+            client-name: Google
+            client-id:
+            client-secret:
+            redirect-uri: http://localhost:8080/login/oauth2/code/google
+            scope: email,profile,openid
+#          facebook:
+#            client-id: ${FACEBOOK_CLIENT_ID:your-facebook-client-id}
+#            client-secret: ${FACEBOOK_CLIENT_SECRET:your-facebook-client-secret}
+#            scope:
+#              - email
+#              - public_profile
+#            redirect-uri: "{baseUrl}/oauth2/callback/{registrationId}"
+#            client-name: Facebook
 #
-#  # File Upload Configuration
-#  servlet:
-#    multipart:
-#      max-file-size: 5MB
-#      max-request-size: 5MB
+#            github:
+#              client-id: ${GITHUB_CLIENT_ID:your-github-client-id}
+#              client-secret: ${GITHUB_CLIENT_SECRET:your-github-client-secret}
+#              scope:
+#                - user:email
+#                - read:user
+#              redirect-uri: "{baseUrl}/oauth2/callback/{registrationId}"
+#              client-name: GitHub
+
+      provider:
+              google:
+                authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+                token-uri: https://www.googleapis.com/oauth2/v4/token
+                user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+                user-name-attribute: sub
+                jwk-set-uri: https://www.googleapis.com/oauth2/v3/certs
+
+#              facebook:
+#                authorization-uri: https://www.facebook.com/v3.0/dialog/oauth
+#                token-uri: https://graph.facebook.com/v3.0/oauth/access_token
+#                user-info-uri: https://graph.facebook.com/v3.0/me?fields=id,first_name,middle_name,last_name,name,email,verified,is_verified,picture.width(250).height(250)
+#                user-name-attribute: id
+#
+#              github:
+#                authorization-uri: https://github.com/login/oauth/authorize
+#                token-uri: https://github.com/login/oauth/access_token
+#                user-info-uri: https://api.github.com/user
+#                user-name-attribute: id
+#          
+
+  # File Upload Configuration
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
 
 # JWT Configuration
 jwt:
-  secret: "this-is-a-very-strong-secret-key-of-32-bytes!"
+  secret: "this-is-a-very-strong-secret-key-of-32-bytes"
   expiration: 86400000  # 24 hours in milliseconds
   refresh-expiration: 2592000000  # 30 days in milliseconds
 
-# Application Configuration
-app:
-  oauth2:
-    authorized-redirect-uri: "http://localhost:8080/oauth2/callback/*"
-  frontend:
-    url:  http://localhost:8080 #${FRONTEND_URL:http://localhost:3000}
-  backend:
-    url: http://localhost:8080  #${BACKEND_URL:http://localhost:8080}
 #
 # File Upload Configuration
 file:
@@ -80,7 +113,8 @@ logging:
   level:
     com.ecommerce: DEBUG
     org.springframework.security: DEBUG
-    org.springframework.web: INFO
+    org.springframework.security.oauth2: DEBUG
+    org.springframework.web: DEBUG
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
@@ -105,27 +139,59 @@ springdoc:
     path: /swagger-ui.html
     operationsSorter: method
 
-
-#server:
-#  port: 8080
-#
-#spring:
-#  application:
-#    name: ECoPro
-#
-#  # Database Configuration (PostgreSQL)
-#  datasource:
-#    url: jdbc:postgresql://localhost:5432/mydb
-#    username: myuser
-#    password: mypassword
-#    driver-class-name: org.postgresql.Driver
-#
-#  # JPA Configuration
-#  jpa:
-#    hibernate:
-#      ddl-auto: update
-#    show-sql: false
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.PostgreSQLDialect
-#        format_sql: true
+# Application Configuration
+app:
+  oauth2:
+    base-url: "http://localhost:8080" #${OAUTH2_BASE_URL:http://localhost:8080}
+    authorized-redirect-uris:
+      - http://localhost:8080/oauth2/redirect
+      - http://localhost:8080/login
+      - http://localhost:8080/register
+      - http://localhost:8080
+  frontend:
+    url:  "http://localhost:8080" #${FRONTEND_URL:http://localhost:3000}
+  backend:
+    url: "http://localhost:8080"  #${BACKEND_URL:http://localhost:8080}
+    
+  order:
+    number-prefix: "ORD-"
+    default-delivery-days: 7
+    cancellation-window-hours: 24
+  
+  payment:
+    reference-prefix: "PAY-"
+    gateway:
+      stripe:
+        enabled: true
+        public-key: ${STRIPE_PUBLIC_KEY:pk_test_...}
+        secret-key: ${STRIPE_SECRET_KEY:sk_test_...}
+        api-url: ${STRIPE_API_URL:https://api.stripe.com/v1}
+        webhook-secret: ${STRIPE_WEBHOOK_SECRET:whsec_...}
+      paypal:
+        enabled: true
+        client-id: ${PAYPAL_CLIENT_ID:...}
+        client-secret: ${PAYPAL_CLIENT_SECRET:...}
+        api-url: ${PAYPAL_API_URL:https://api-m.sandbox.paypal.com}
+        webhook-id: ${PAYPAL_WEBHOOK_ID:...}
+        
+  # Review Configuration
+  review:
+    max-images: 5
+    min-review-length: 10
+    max-review-length: 2000
+    auto-approve: false
+    moderation-threshold: 3
+    image-upload-path: "reviews"
+  
+  shipment:
+    tracking-prefix: "TRK-"
+    carriers:
+      - "FedEx"
+      - "UPS"
+      - "DHL"
+      - "USPS"
+    methods:
+      - "Standard"
+      - "Express"
+      - "Overnight"
+      - "Priority"
